@@ -1,0 +1,33 @@
+{
+  "name": "fajar_foodways_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "concurrently": "^6.0.0",
+    "express": "^4.17.1",
+    "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.2",
+    "mysql2": "^2.2.5",
+    "nodemon": "^2.0.7",
+    "sequelize": "^6.5.1",
+    "sequelize-cli": "^6.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/achmadfajar-24/fajar_foodways_api.git"
+  },
+  "author": "Fajar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/achmadfajar-24/fajar_foodways_api/issues"
+  },
+  "homepage": "https://github.com/achmadfajar-24/fajar_foodways_api#readme"
+}

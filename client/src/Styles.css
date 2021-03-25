@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Libre+Baskerville:wght@700&display=swap');
+
+body{
+  background: #EFEFEF;
+}
+
+/*Set Font Size*/
+.font-small{
+	font-size: 14px!important;
+}
+.font-standart{
+	font-size: 18px!important;
+}
+.font-big{
+	font-size: 30px!important;
+}
+
+/*Set Font*/
+.libre{
+	font-family: 'Libre Baskerville', serif;
+}
+.barlow{
+	font-family: 'Barlow Condensed', sans-serif;
+}
+
+a.navbar-brand{
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 30px;
+}
+
+.user-icon{
+  height: 50px;
+  width: 50px;
+}
+
+.user-icon-dropdown{
+  height: 30px;
+  width: 30px;
+}
+
+.dropdown-toggle::after{
+  display: none;
+}
+
+.custom-dropdown a{
+  padding: 0;
+}
+
+.font-weight-500{
+	font-weight: 500;
+}
+
+.foodways-modal{
+	width: 300px;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+}
+
+.foodways-navbar{
+	z-index: 200;
+}
+
+.landing-page{
+	left: 0;
+	right: 0;
+	top: 0;
+	height: 558px;
+	z-index: 100;
+}
+
+.landing-position{
+	margin-top: 150px;
+}
+
+.landing-text h1{
+	font-size: 55px;
+	font-family: 'Libre Baskerville', serif;
+}
+
+.line{
+	border-top: 5px solid rgba(67, 52, 52, 1);
+	width: 100%;
+	margin-top: 15px;
+}
+
+.description{
+	font-size: 14px;
+	font-family: 'Comfortaa', cursive;
+}
+
+.pizza img{
+	position: absolute;
+	width: 408px;
+	height: 393px;
+	right: 0;
+	top: -50px;
+}
+
+.popular-restourant{
+	margin-top: 620px;
+  	font-family: 'Libre Baskerville', serif;
+}
+
+.popular-restourant-title{
+  font-size: 20px;
+}
+
+.popular-restourant h2{
+	font-family: 'Libre Baskerville', serif;
+}
+
+.restourant-near-you{
+	font-family: 'Libre Baskerville', serif;
+}
+
+.restourant-near-you-item img{
+  width: 100%;
+}
+
+.restourant-near-you-item h6{
+  height: 30px;
+}
+
+.restourant-near-you-item span{
+  font-size: 12px;
+}
+
+/* Detail Product */
+.foodways-nav{
+    left: 0;
+	right: 0;
+	top: 0;
+	height: 73px;
+	z-index: 100;
+}
+
+/*Cart Page*/
+.cart-page{
+	margin: 120px 0 30px 0;
+}
+.counter span {
+	height: 30px;
+	width: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+.calculate{
+	padding: 22px 0;
+	margin: 40px 0 0 0;
+}
+
+/*Product Menu*/
+.detail-product-menu{
+	margin: 120px 0 30px 0;
+}
+
+/*Profile Page*/
+.profile-page{
+	margin: 120px 0 30px 0;
+}
+
+
+/*Map*/
+.map-container {
+position: relative;
+}
+
+.modal-90w{
+	width: 90%;
+}
+
+/*User Info*/
+.user-info span{
+	font-size: 20px;
+}
+
+.bg-status{
+	background: rgba(0, 255, 71, 0.2);
+	width: 70%;
+	margin: 6px 0;
+	float: right;
+}
+
+/*Edit User*/
+.bg-input{
+	background-color: #EFEFEF!important;
+}
+
+/*Map*/
