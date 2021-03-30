@@ -20,6 +20,9 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
+      gender: {
+        type: Sequelize.STRING
+      },
       location: {
         type: Sequelize.STRING
       },
@@ -27,6 +30,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       role: {
+        type: Sequelize.STRING
+      },
+      slug: {
         type: Sequelize.STRING
       },
       createdAt: {

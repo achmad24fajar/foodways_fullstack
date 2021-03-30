@@ -26,7 +26,7 @@ function Map() {
 
   return (
     <>
-    <Button variant="dark" onClick={handleShow} className="mr-2" style={{width: "250px"}}>
+    <Button variant="dark" onClick={handleShow} className="btn-block rounded-right">
       <FontAwesomeIcon icon={faMapMarker} className="text-white font-standart mr-2" />See on map
     </Button>
     

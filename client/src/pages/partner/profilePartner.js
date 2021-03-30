@@ -15,7 +15,7 @@ function ProfilePartner() {
 					<Row>
 						<Col md={7}>
 							<h3 className="libre">Profile Partner</h3>
-							<div className="user mt-4">
+							<div className="user mt-3 bg-white p-2 border rounded shadow-sm">
 								<Row>
 									<Col md={4}>
 										<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Zayn_Wiki_%28cropped%29.jpg/220px-Zayn_Wiki_%28cropped%29.jpg" 
@@ -28,15 +28,15 @@ function ProfilePartner() {
 									</Col>
 									<Col md={8}>
 										<div className="user-info">
-										<div>
+										<div className="p-2 border-bottom border-muted">
 											<span className="d-block font-weight-bold">FullName</span>
 											<span className="d-block">Achmad Fajar</span>
 										</div>
-										<div className="mt-2">
+										<div className="mt-2 p-2 border-bottom border-muted">
 											<span className="d-block font-weight-bold">Email</span>
 											<span className="d-block">achmad10@gmail.com</span>
 										</div>
-										<div className="mt-2">
+										<div className="mt-2 p-2 border-bottom border-muted">
 											<span className="d-block font-weight-bold">Phone</span>
 											<span className="d-block">090989878</span>
 										</div>
@@ -45,10 +45,10 @@ function ProfilePartner() {
 								</Row>
 							</div>
 						</Col>
-						<Col md={5}>
-							<h3 className="libre">History Order</h3>
-							<div className="history mt-4">
-								<div className="bg-white p-3 rounded">
+						<Col md={5} className="mt-5">
+							<h5 className="libre">History Order</h5>
+							<div className="history mt-3">
+								<div className="bg-white p-3 rounded shadow-sm">
 								<Row>
 									<Col md={6}>
 										<div className="product-name">

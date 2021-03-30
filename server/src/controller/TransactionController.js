@@ -3,11 +3,16 @@ const { Op } = require("sequelize");
 
 exports.getTransactions = async (req, res) => {
 	try{
+		const userId = req.userId.id
+
 		const transactionsFromDB = await Transaction.findAll({
+			where: {
+				partnerId: userId
+			},
 			include: [{
 				model: User,
 				attributes:{
-					exclude: ["createdAt", "updatedAt", "role", "password"]
+					exclude: ["email", "password", "role", "gender", "phone", "createdAt", "updatedAt", "image", "location", "slug"]
 				},
 			},{
 				model: Order,
@@ -18,17 +23,18 @@ exports.getTransactions = async (req, res) => {
 				include: [{
 					model: Product,
 					attributes: {
-						exclude: ["id","createdAt", "updatedAt", "userId"]
-					}
+						exclude: ["id","createdAt", "updatedAt", "price"]
+					},
 				}]
 			}],
 			attributes: {
-				exclude: ["createdAt", "updatedAt", "userId"]
+				exclude: ["updatedAt", "userId"]
 			}
 		})
 
 		const transactionsString = JSON.stringify(transactionsFromDB);
     	const transactionsObject = JSON.parse(transactionsString);
+    	console.log(transactionsObject.User)
 
 		const loopTransactions = transactionsObject.map(transaction => {
 			const order = transaction.orders.map(order => {
@@ -38,24 +44,15 @@ exports.getTransactions = async (req, res) => {
 					qty: order.qty
 				}
 			})
-			return {
-				id: transaction.id,
-				user: {
-					...transaction.User
-				},
+			return{
+				...transaction.User,
 				status: transaction.status,
+				total: transaction.total,
 				orders: {
 					order
 				}
 			}
 		})
-
-		if(!transactionsObject){
-			return res.status(400).send({
-	            status: "failed",
-	            message: "You haven't transaction yet",
-	        });
-		}
 
 		res.send({
 			status: "Success",
@@ -124,7 +121,11 @@ exports.getDetailTransactions = async (req, res) => {
 
 exports.addTransactions = async (req, res) => {
 	try{
-		const { products } = req.body
+		const products = req.body
+		console.log(req.body)
+		let totalPrice = 0
+		let total = 0
+		let partnerId = 0
 
 		const addTransaction = await Transaction.create({
 			userId: req.userId.id,
@@ -132,12 +133,24 @@ exports.addTransactions = async (req, res) => {
 		});
 
 		const saveData = await products.forEach(product => {
+			totalPrice = product.price * product.qty
+			total += totalPrice
+			partnerId = product.userId
 			const saveOrders = Order.create({
 				productId: product.id,
 				qty: product.qty,
-				transactionId: addTransaction.dataValues.id
+				transactionId: addTransaction.dataValues.id,
+				totalPrice: totalPrice
 			})
-			
+		})
+
+		const updateTransaction = await Transaction.update({
+			total: total + 20000,
+			partnerId: partnerId
+		},{
+			where: {
+				id: addTransaction.dataValues.id,
+			}
 		})
 
 		const user = await User.findOne({
@@ -191,8 +204,6 @@ exports.editTransactions = async (req, res) => {
 	try{
 		const { id } = req.params
 		const { body } = req
-
-		console.log(body)
 
 		const editTransaction = await Transaction.update(body, {
 			where: {
@@ -337,12 +348,12 @@ exports.myTransactions = async (req, res) => {
 				include: [{
 					model: Product,
 					attributes: {
-						exclude: ["id","createdAt", "updatedAt", "userId"]
-					}
+						exclude: ["id","createdAt", "updatedAt", "price"]
+					},
 				}]
 			}],
 			attributes: {
-				exclude: ["createdAt", "updatedAt", "userId"]
+				exclude: ["updatedAt", "userId"]
 			}
 		})
 
@@ -362,9 +373,10 @@ exports.myTransactions = async (req, res) => {
 			return {
 				id: transaction.id,
 				status: transaction.status,
-				orders: [{
+				total: transaction.total,
+				orders: {
 					order
-				}]
+				}
 			}
 		})
 

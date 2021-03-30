@@ -49,8 +49,6 @@ function Cart() {
 		price.push(cart.price * cart.qty)
 	})
 
-	console.log(state.ongkir);
-
 	let subTotal = (price.length != 0 ? price.reduce((a, b) => a + b) : 0 )
 	let totalItem = (qty.length != 0 ? qty.reduce((a, b) => a + b) : 0 )
 	let total = subTotal + state.ongkir
@@ -82,12 +80,12 @@ function Cart() {
 								<h2 className="libre">{state.currentRestaurant}</h2>
 								<div className="location mt-5"> 
 									<label>Delivery Location</label>
-									<div className="form-group d-flex">
-										<input name="location" type="text" className="form-control" style={{
-											width: "86%",
-											marginRight: "5px",
-										}} />
-										<Map/>
+									<div class="input-group mb-3">
+										<input type="text" class="form-control" placeholder="Your Location" 
+										aria-label="Your Location" aria-describedby="button-addon2"/>
+										<div class="input-group-append">
+											<Map/>
+										</div>
 									</div>
 								   	<div className="cartItem mt-3">
 										<Row>
@@ -99,7 +97,7 @@ function Cart() {
 												<div className="border-bottom border-dark pt-2 pb-3">
 												<Row className="mt-3" key={cart.id}>
 													<Col md={2}>
-														<img src={cart.image} alt={cart.name} 
+														<img src={`http://localhost:5000/uploads/${cart.image}`} alt={cart.name} 
 														style={{
 															width: "100%"
 														}} />

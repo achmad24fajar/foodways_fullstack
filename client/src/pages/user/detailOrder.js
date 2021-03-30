@@ -10,8 +10,6 @@ function DetailOrder() {
 	const [state, dispatch] = useContext(CartContext);
 	const orders = state.order[0];
 
-	console.log(state.restaurant)
-
 	let qty = [];
 	let price = [];
 	const pushCarts = orders.map(order => {

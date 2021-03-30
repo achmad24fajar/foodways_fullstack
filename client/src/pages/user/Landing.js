@@ -2,6 +2,8 @@ import React, {useState, useContext} from 'react';
 import {UserContext} from '../../context/userContext';
 import {Link} from "react-router-dom";
 import {Container, Row, Col} from 'react-bootstrap';
+import {useQuery} from 'react-query';
+import {API} from '../../config/api'
 
 import {restourants} from '../../data/dataRestourant.js';
 import {restourantNearYou} from '../../data/dataRestourantNearYou.js';
@@ -10,10 +12,14 @@ import Card from '../../components/Card.js';
 const Landing = () => {
 
 	const [state] = useContext(UserContext);
+	const { data: users, loading, error, refetch } = useQuery('partners', async () => {
+      const response = await API.get("/users/partners");
+      return response;
+    })
 
 	return (
 	<div>
-		<div className="bg-warning position-absolute landing-page">
+		<div className="bg-warning position-fixed landing-page">
 			<Container>
 				<Row className="landing-position">
 					<Col md={8}>
@@ -44,32 +50,34 @@ const Landing = () => {
 			</Container>
 		</div>
 
-		<div className="popular-restourant mb-5">
-			<Container>
-				<h2>Popular Restourant</h2>
-				<Row>
-				{restourants.map((data) => (
-					<Col md={3}>
-		        		<Link as={Link} to={'/detail-product/'+data.name.toLowerCase()} className="nav-link p-0 text-dark">
-							<Card data={data} template="style-1"/>
-						</Link>
-					</Col>
-				))}
-				</Row>
-			</Container>
-		</div>
+		<div className="content shadow">
+			<div className="popular-restourant mb-5">
+				<Container>
+					<h2>Popular Restourant</h2>
+					<Row>
+						{users?.data?.data?.users?.map((data) => (
+							<Col md={3}>
+				        		<Link as={Link} to={'/detail-product/'+data.slug} className="nav-link p-0 text-dark">
+									<Card key={data.fullname} data={data} template="style-1"/>
+								</Link>
+							</Col>
+						))}
+					</Row>
+				</Container>
+			</div>
 
-		<div className="restourant-near-you">
-			<Container>
-				<h2>Restourant Near You</h2>
-				<Row>
-				{restourantNearYou.map((data) => (
-					<Col md={3}>
-						<Card data={data} template="style-2"/>
-					</Col>
-				))}
-				</Row>
-			</Container>
+			<div className="restourant-near-you">
+				<Container>
+					<h2>Restourant Near You</h2>
+					<Row>
+					{restourantNearYou.map((data) => (
+						<Col md={3}>
+							<Card data={data} template="style-2"/>
+						</Col>
+					))}
+					</Row>
+				</Container>
+			</div>
 		</div>
 	</div>
 	);

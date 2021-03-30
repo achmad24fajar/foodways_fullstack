@@ -4,28 +4,24 @@ const Joi = require("joi");
 
 exports.getProducts = async (req, res) => {
 	try{
+		const {id} = req.params
+
 		const products = await Product.findAll({
-			include: [
-				{	
-					model: User,
-					attributes:{
-						exclude: ["createdAt", "updatedAt", "role", "password"]
-					},
-				}
-			],
+			where: {
+				userId: id
+			},
 			attributes: {
-				exclude: ["createdAt", "updatedAt", "userId", "UserId"]
+				exclude: ["createdAt", "updatedAt", "UserId"]
 			}
 		});
-
 		res.send({
 			status: "success",
-			message: "Products Succesfully Get",
+			message: "Users Succesfully Get",
 			data: {
 				products,
 			},
 	    });
-	} catch (err) {
+	}catch (err) {
 		console.log(err);
 	    res.status(500).send({
 	        status: "error",
@@ -36,10 +32,9 @@ exports.getProducts = async (req, res) => {
 
 exports.getProductsByUser = async (req, res) => {
 	try{
-		const {id} = req.params;
 		const products = await Product.findAll({
 			where: {
-				userId: id
+				userId: req.userId.id
 			},
 			attributes: {
 				exclude: ["createdAt", "updatedAt", "userId", "UserId"]
@@ -68,23 +63,30 @@ exports.getDetailProduct = async (req, res) => {
 			where: {
 				id
 			},
-			include: [
-				{	
-					model: User,
-					attributes:{
-						exclude: ["createdAt", "updatedAt", "role", "password"]
-					}
-				}
-			],
 			attributes: {
 				exclude: ["createdAt", "updatedAt", "userId", "UserId"]
 			}
 		});
+
+		const user = await User.findOne({
+			where: {
+				id: req.userId.id
+			},
+			attributes:{
+				exclude: ["createdAt", "updatedAt", "role", "password"]
+			}
+		})
+
 		res.send({
 			status: "success",
 			message: "User Succesfully Get",
 			data: {
-				product,
+				product:{
+					...product.dataValues,
+					user:{
+						...user.dataValues
+					}
+				}
 			},
 	    });
 	} catch (err) {
@@ -99,6 +101,8 @@ exports.getDetailProduct = async (req, res) => {
 exports.addProduct = async (req, res) => {
 	try{
 		const { title, price, image, userId } = req.body
+
+		console.log(req.body)
 
 		const schema = Joi.object({
 	      title: Joi.string().required(),
@@ -124,24 +128,28 @@ exports.addProduct = async (req, res) => {
 			where: {
 				id: postProduct.id
 			},
-			include:[
-				{
-					model: User,
-					attributes: {
-						exclude: ["createdAt", "updatedAt", "role", "password"]
-					}
-				}
-			],
 			attributes:{
 				exclude: ["createdAt", "updatedAt", "userId", "UserId"]
 			}
 		});
 
+		const user = await User.findOne({
+			where: {
+				id: req.userId.id
+			},
+			attributes: {
+				exclude: ["createdAt", "updatedAt", "role", "password"]
+			}
+		})
+
 		res.send({
 			status: "success",
 			message: "Users Succesfully Get",
 			data: {
-				product,
+				product:{
+					...product.dataValues,
+					user
+				}
 			},
 	    });
 
@@ -157,12 +165,11 @@ exports.addProduct = async (req, res) => {
 exports.editProduct = async (req, res) => {
 	try{
 		const { id } = req.params
-		const { body } = req
+		const { title, price, image } = req.body
 
 		const schema = Joi.object({
 	      title: Joi.string().required(),
-	      price: Joi.integer().required(),
-	      image: Joi.required(),
+	      price: Joi.required(),
 	    });
 
 	    const { error } = schema.validate(req.body);
@@ -185,7 +192,11 @@ exports.editProduct = async (req, res) => {
 	        message: `Data with id: ${id} not found`,
 	      });
 
-		const updateProduct = await Product.update(body,{
+		const updateProduct = await Product.update({
+			title: title,
+			price: price,
+			image: req.files.image[0].filename,
+		},{
 			where: {
 				id,
 			}

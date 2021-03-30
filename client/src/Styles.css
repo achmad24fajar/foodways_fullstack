@@ -24,6 +24,12 @@ body{
 	font-family: 'Barlow Condensed', sans-serif;
 }
 
+/*Style Form Input*/
+input:focus,select:focus{
+	box-shadow: 0px 0px 2px 2px #ffc107!important;
+	border: #ffc107!important;
+}
+
 a.navbar-brand{
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 30px;
@@ -79,6 +85,42 @@ a.navbar-brand{
 	font-family: 'Libre Baskerville', serif;
 }
 
+.icon-default{
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	padding: 5px;
+	width: 60px;
+	line-height: 45px;
+}
+.icon-default svg{
+	margin-left: 10px;
+	vertical-align: middle;
+	font-size: 40px;
+}
+.popular-restourant-item{
+	height: 60px;
+}
+.popular-restourant-title{
+  	font-size: 20px;
+	vertical-align: middle;
+	margin-left: 70px;
+	line-height: 45px;
+}
+
+/*Content*/
+.content{
+	position: absolute;
+	z-index: 200;
+	background: #EFEFEF;
+	left: 0;
+	right: 0;
+	top: 558px;
+	padding: 120px 0 50px 0;
+	height: 700px;
+}
+
 .line{
 	border-top: 5px solid rgba(67, 52, 52, 1);
 	width: 100%;
@@ -99,13 +141,9 @@ a.navbar-brand{
 }
 
 .popular-restourant{
-	margin-top: 620px;
   	font-family: 'Libre Baskerville', serif;
 }
 
-.popular-restourant-title{
-  font-size: 20px;
-}
 
 .popular-restourant h2{
 	font-family: 'Libre Baskerville', serif;
@@ -161,6 +199,11 @@ a.navbar-brand{
 	margin: 120px 0 30px 0;
 }
 
+.product-image{
+	height: 100px;
+	width: 100px;
+}
+
 
 /*Map*/
 .map-container {
@@ -170,14 +213,29 @@ position: relative;
 .modal-90w{
 	width: 90%;
 }
+.modal{
+	overflow-y: hidden!important;
+}
 
 /*User Info*/
 .user-info span{
 	font-size: 20px;
 }
 
-.bg-status{
+.bg-Success{
 	background: rgba(0, 255, 71, 0.2);
+	width: 70%;
+	margin: 6px 0;
+	float: right;
+}
+.bg-Pending{
+	background: rgba(255,255,102,0.5);
+	width: 70%;
+	margin: 6px 0;
+	float: right;
+}
+.bg-Failed{
+	background: rgba(204,0,0,0.5);
 	width: 70%;
 	margin: 6px 0;
 	float: right;
@@ -188,4 +246,11 @@ position: relative;
 	background-color: #EFEFEF!important;
 }
 
-/*Map*/
+/**/
+.image-preview{
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	width: 250px;
+	height: 250px;
+}

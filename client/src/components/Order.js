@@ -3,10 +3,16 @@ import {CartContext} from '../context/cartContext';
 import {Button, Modal, Row, Col} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingBag } from '@fortawesome/free-solid-svg-icons'
+import {useQuery, useMutation } from 'react-query';
+import {API} from '../config/api'
+import {useHistory} from "react-router-dom";
+
 
 import {Link} from 'react-router-dom'
 
 function Order(props) {
+	const router = useHistory()
+
 	const [state, dispatch] = useContext(CartContext);
 	const [show, setShow] = useState(false);
 
@@ -18,8 +24,35 @@ function Order(props) {
 	    });
 	};
 
+	console.log(props.carts)
+
+	const { data: users, loading, error, refetch } = useQuery('product', async () => {
+	    const response = await API.get("/transactions");
+	    return response;
+	})
+
+	const addTransaction = useMutation(async () => {
+
+		const products = props.carts
+
+		const config = {
+		    headers: {
+		      	"Content-Type": "application/json",
+		    },
+	    };
+	    
+	    const response = await API.post("/transaction", products, config);
+	    refetch()
+    });
+
 	const handleClose = () => setShow(false);
   	const handleShow = () => setShow(true);
+
+  	const handleTransaction = (e) => {
+  		e.preventDefault();
+  		addTransaction.mutate();
+  		router.push('/profile')
+  	}
 
 	return (
     <>
@@ -41,7 +74,7 @@ function Order(props) {
 			<div className="border-bottom border-muted py-2 ">
 			<Row key={cart.id}>
 				<Col md={2}>
-					<img src={cart.image} alt={cart.name} 
+					<img src={`http://localhost:5000/uploads/${cart.image}`} alt={cart.name} 
 					style={{
 						width: "120%"
 					}} />
@@ -82,7 +115,7 @@ function Order(props) {
         </Modal.Body>
         <Modal.Footer className="text-left">
 	        <Link as={Link} to={'/detail-order/'} 
-	        onClick={(carts,newResto) => order(state.carts,state.currentRestaurant)} 
+	        onClick={handleTransaction} 
 	        className="btn btn-dark">
 	        	Confirm
 	        </Link>

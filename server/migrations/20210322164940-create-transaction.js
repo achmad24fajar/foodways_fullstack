@@ -21,6 +21,12 @@ module.exports = {
       status: {
         type: Sequelize.STRING
       },
+      total:{
+        type: Sequelize.INTEGER
+      },
+      partnerId:{
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

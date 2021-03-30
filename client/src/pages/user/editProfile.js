@@ -18,42 +18,32 @@ function EditProfile() {
 						<h3 className="libre">Edit Profile</h3>
 						<div className="mt-4">
 							<form>
-							<Row>
-								<Col md={9}>
-									<div className="form-group">
-										<input type="text" className="form-control bg-input" placeholder="Full Name"/>
-									</div>
-								</Col>
-								<Col md={3}>
-									<div className="custom-file">
-										<input type="file" className="custom-file-input" id="validatedCustomFile" required/>
-										<label className="custom-file-label bg-input" for="validatedCustomFile">Choose file...</label>
-									</div>
-								</Col>
-							</Row>
-							<div className="form-group">
-								<input type="email" className="form-control bg-input" placeholder="Email"/>
-							</div>
-							<div className="form-group">
-								<input type="text" className="form-control bg-input" placeholder="Phone"/>
-							</div>
-							<Row>
-								<Col md={9}>
-									<div className="form-group">
-										<input type="text" className="form-control bg-input" placeholder="Location"/>
-									</div>
-								</Col>
-								<Col md={3}>
+								<div className="form-group">
+									<input type="text" className="form-control" placeholder="Full Name"/>
+								</div>
+								<div className="form-group">
+									<input type="email" className="form-control" placeholder="Email"/>
+								</div>
+								<div className="form-group">
+									<input type="text" className="form-control" placeholder="Phone"/>
+								</div>
+								<div className="custom-file">
+									<input type="file" className="custom-file-input file" id="validatedCustomFile" required/>
+									<label className="custom-file-label" for="validatedCustomFile">Choose file...</label>
+								</div>
+								<div class="input-group my-3">
+								    <input type="text" class="form-control" placeholder="Your Location" 
+								    aria-label="Your Location" aria-describedby="button-addon2" />
+								    <div class="input-group-append">
+								    	<Map/>
+								    </div>
+								</div>
 
-								<Map />
-								
-								</Col>
-							</Row>
-							<div className="mt-4 text-right">
-								<button type="submit" className="btn btn-dark" style={{width: "300px"}}>
-									<FontAwesomeIcon icon={faSave} className="font-standart float-left mt-1" /> Save
-								</button>
-							</div>
+								<div className="mt-4 text-right border-top pt-4">
+									<button type="submit" className="btn btn-dark" style={{width: "300px"}}>
+										<FontAwesomeIcon icon={faSave} className="font-standart float-left mt-1" /> Save
+									</button>
+								</div>
 							</form>
 						</div>
 					</div>

@@ -4,7 +4,7 @@ import {UserContext} from '../context/userContext';
 import {CartContext} from '../context/cartContext';
 import {NavDropdown, Nav, Alert} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartPlus, faUser, faSignOutAlt, faBoxes } from '@fortawesome/free-solid-svg-icons'
+import { faCartPlus, faUser, faSignOutAlt, faBoxes, faTruck } from '@fortawesome/free-solid-svg-icons'
 
 function UserActive(props) {
 
@@ -38,6 +38,17 @@ function UserActive(props) {
         } id="basic-nav-dropdown" className="float-right custom-dropdown">
 
         {(props.role == 'partner') ? (
+          <div>
+        <Nav.Link as={Link} to="/partner">
+          <NavDropdown.Item href="/partner" className="p-2 font-weight-bold">
+            <span style={{marginRight: "15px"}}>
+              <FontAwesomeIcon icon={faTruck} className="text-dark font-standart" />
+            </span>
+            <span>
+              Transactions
+            </span>
+          </NavDropdown.Item>
+        </Nav.Link>
         <Nav.Link as={Link} to="/partner/profile-partner">
           <NavDropdown.Item href="/partner/profile-partner" className="p-2 font-weight-bold">
             <span style={{marginRight: "15px"}}>
@@ -48,6 +59,7 @@ function UserActive(props) {
             </span>
           </NavDropdown.Item>
         </Nav.Link>
+        </div>
         ) : (
         <Nav.Link as={Link} to="/profile">
           <NavDropdown.Item href="/profile" className="p-2 font-weight-bold">
@@ -62,8 +74,8 @@ function UserActive(props) {
         )}
 
         { props.role == 'partner' && 
-        <Nav.Link as={Link} to="/partner/add-product">
-          <NavDropdown.Item href="/partner/add-product" className="p-2 font-weight-bold">
+        <Nav.Link as={Link} to="/partner/products">
+          <NavDropdown.Item href="/partner/products" className="p-2 font-weight-bold">
             <span style={{marginRight: "11px"}}>
               <FontAwesomeIcon icon={faBoxes} className="text-dark font-standart" />
             </span>

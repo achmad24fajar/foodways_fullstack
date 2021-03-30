@@ -5,13 +5,15 @@ const Joi = require("joi");
 
 exports.registerUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { fullname, email, password } = req.body;
+    console.log(req.body)
 
     const schema = Joi.object({
       fullname: Joi.string().required(),
       email: Joi.string().email().min(10).max(50).required(),
       password: Joi.string().min(8).required(),
       phone: Joi.string().required(),
+      gender: Joi.string(),
       location: Joi.string(),
       role: Joi.string().required(),
     });
@@ -39,33 +41,33 @@ exports.registerUser = async (req, res) => {
     const hashStrength = 10;
     const salt = bcrypt.genSaltSync(hashStrength);
     const hashedPassword = await bcrypt.hashSync(password, salt);
+    const slug = fullname.toLowerCase().replace(" ", "-")
 
     const user = await User.create({
       ...req.body,
-      image: req.files.image[0].filename,
       password: hashedPassword,
+      slug: slug
     });
 
     const secretKey = "akda4860@a9d1";
-    const token = 'Bearer ' + jwt.sign(
+    const token = jwt.sign(
       {
         id: user.id,
       },
       secretKey
     );
 
-    const url = "http://localhost:5000/uploads/";
-
     res.send({
       status: "success",
       message: "User Succesfully Registered",
       data: {
         user: {
-          fullname: user.name,
+          fullname: user.fullname,
           email: user.email,
           token,
           role: user.role,
-          image: url + user.image,
+          gender: user.gender,
+          slug: user.slug
         },
       },
     });
@@ -119,7 +121,7 @@ exports.loginUser = async (req, res) => {
     }
 
     const secretKey = "akda4860@a9d1";
-    const token = 'Bearer ' + jwt.sign(
+    const token = jwt.sign(
       {
         id: checkEmail.id,
       },
@@ -131,10 +133,46 @@ exports.loginUser = async (req, res) => {
       message: "Login Success",
       data: {
         user: {
-          name: checkEmail.name,
+          fullname: checkEmail.fullname,
           email: checkEmail.email,
+          role: checkEmail.role,
           token,
         },
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      status: "error",
+      message: "Server Error",
+    });
+  }
+};
+
+exports.checkAuth = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.userId.id,
+      },
+    });
+
+    const secretKey = "akda4860@a9d1";
+    const token = jwt.sign(
+      {
+        id: req.userId.id,
+      },
+      secretKey
+    );
+
+    res.send({
+      status: "success",
+      message: "User Valid",
+      data: {
+        user:{
+          ...user.dataValues,
+          token
+        }
       },
     });
   } catch (err) {
