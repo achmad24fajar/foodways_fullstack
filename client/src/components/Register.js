@@ -1,43 +1,50 @@
-import {useState, useContext} from 'react';
-import {UserContext} from '../context/userContext';
-import {Button, Modal, Form} from 'react-bootstrap';
-import {useHistory} from 'react-router-dom';
-import {useQuery, useMutation } from 'react-query';
-import {API, setAuthToken} from '../config/api'
+import React, { useState } from 'react';
+import { Formik, Form } from "formik"
+import * as Yup from 'yup'
+import { useHistory } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-query';
+import { API, setAuthToken } from '../config/api'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { isLogin } from '../actions'
+import { useDispatch, useSelector } from "react-redux";
 
-import LoginForm from './Login'
+import TextField from "./form/TextField"
+import SelectField from "./form/SelectField"
+import SlideShow from './SlideShow'
 
-function Register() {
+const Register = () => {
   const router = useHistory();
-  const [show, setShow] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const [state, dispatch] = useContext(UserContext);
-
-  const [confirmPassword, setConfirmPass] = useState('')
-  const [errorPassword, setErrorPassword] = useState('')
-  const [dataUser, setDataUser] = useState('');
-  const [register, setRegister] = useState({
-    fullname: "",
-    email: "",
-    password: "",
-    phone: "",
-    gender: "",
-    role: ""
-  });
-  const [newerror, setError] = useState('');
-
-  const { fullname, email, password, phone, gender, role } = register;
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const handleCloseConfirmPassword = () => setShowConfirmPassword(false);
-  const handleshowConfirmPassword = () => setShowConfirmPassword(true);
- 
-  const { data: users, loading, error, refetch } = useQuery('register', async () => {
-    const response = await API.get("/users");
-    return response;
+  const dispatch = useDispatch();
+  const [error, setError] = useState('')
+  const [user, setUser] = useState({
+    fullname: '',
+    email: '',
+    password: '',
+    gender: '',
+    phone: '',
+    confirmPassword: ''
   })
+  const {fullname, email, password, gender, phone} = user;
+
+  const SignupSchema = Yup.object().shape({
+    fullname: Yup.string()
+      .min(2, 'Too Short!')
+      .max(50, 'Too Long!')
+      .required('Required'),
+    email: Yup.string().email('Invalid email').required('Required'),
+    gender: Yup.string()
+      .required('Required'),
+    phone: Yup.string()
+      .required('Required')
+      .min(8, 'Too Short!')
+      .max(14, 'Too Long!'),
+    password: Yup.string().required('Password is required')
+    .min(8, 'Too Short!'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Confirm Password is required')
+ });
 
   const addUser = useMutation(async () => {
     try{
@@ -53,170 +60,73 @@ function Register() {
         password,
         gender,
         phone,
-        role,
       });
 
       const response = await API.post("/register", body, config);
-      setDataUser(response.data.data.user)
-      refetch();
-
-      handleClose()
-      handleshowConfirmPassword()
     } catch (err) {
       setError(err.response.data.message)
     }
   });
 
-  const onChange = (e) => {
-    setRegister({
-      ...register,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleRegister = (e) => {
-    e.preventDefault()
+  const handleRegister = (user) => {
+    setUser(user)
     addUser.mutate();
-    
-  }
-
-  const handleConfirmPassword = (e) => {
-    e.preventDefault()
-
-    if(confirmPassword !== password){
-      return setErrorPassword('Your Password is incorrect!')
-    }
-
-    dispatch({
-      type: 'USER_VALID',
-      payload: dataUser
-    });
-
-    setAuthToken(dataUser.token)
-
-    handleCloseConfirmPassword()
-
-    if(role == 'partner'){
-      router.push('/partner');
-    }else{
-      router.push('/');
-    }
-  }
-
-  const logout = (e) => {
-    e.preventDefault();
-    localStorage.removeItem("token")
-    localStorage.removeItem("role")
-    handleCloseConfirmPassword()
   }
 
   return (
-    <>
-    <Button variant="dark" onClick={handleShow} className="btn-sm mr-2">
-      Register
-    </Button>
-    <Modal show={show} onHide={handleClose} className="foodways-modal" backdrop="static" centered>
-      
-      <Modal.Body className="px-4">
-        <div>
-          <h2 className="text-warning">Register</h2>
+    <div className={error && 'pt-5'}>
+      {error && (
+        <div className="bg-danger position-absolute foodways-alert text-light" role="alert">
+          <FontAwesomeIcon icon={faExclamationTriangle} /> {error}
         </div>
-        {newerror && 
-        <div class="alert alert-danger" role="alert">
-          {newerror}
+      )}
+      <div className="ml-3 text-center">
+        <h2 className="text-warning">Register</h2>
+      </div>
+      <Formik
+        initialValues={{
+          fullname: '',
+          email: '',
+          gender: '',
+          phone: '',
+          password: '',
+          confirmPassword: ''
+        }}
+        validationSchema={SignupSchema}
+        onSubmit={(values) => handleRegister(values)}
+      >
+        {({values}) => (
+          <div className="mt-4">
+            <Form className="ml-3">
+            {console.log(values)}
+              <div className="d-flex">
+                <div className="flex-fill mr-1">
+                  <TextField type="text" name="fullname" placeholder="Full Name" />
+                  <SelectField name="gender" />
+                  <TextField type="password" name="password" placeholder="Password" />
+                </div>
+                <div className="flex-fill ml-1">
+                  <TextField type="email" name="email" placeholder="Your E-Mail" />
+                  <TextField type="text" name="phone" placeholder="Phone Number" />
+                  <TextField type="password" name="confirmPassword" placeholder="Confirm Password" />
+                </div>
+              </div>
+              <div className="mt-3">
+                <button className="btn btn-warning btn-block text-light" type="submit">Register</button>
+              </div>
+              <div className="text-muted mt-2 text-center">
+                Already have an account? Klik
+                <span
+                className="text-dark font-weight-500"
+                role="button"
+                onClick={() => dispatch(isLogin())}> Here</span>
+              </div>
+            </Form>
           </div>
-        }
-        <div className="mt-4">
-          <Form onSubmit={handleRegister}>
-
-            <Form.Group controlId="formBasicEmail">
-              <Form.Control type="email" placeholder="Enter email" name="email" value={email} onChange={(e) => onChange(e)} />
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword">
-              <Form.Control type="password" placeholder="Password" name="password" value={password} onChange={(e) => onChange(e)} />
-            </Form.Group>
-
-            <Form.Group controlId="formBasicEmail">
-              <Form.Control type="text" placeholder="Full Name" name="fullname" value={fullname} onChange={(e) => onChange(e)} />
-            </Form.Group>
-
-            <Form.Group controlId="exampleForm.ControlSelect1" >
-              <Form.Control as="select" name="gender" onChange={(e) => onChange(e)}>
-                <option value="">Choose Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword">
-              <Form.Control type="text" name="phone" placeholder="Phone" value={phone} onChange={(e) => onChange(e)} />
-            </Form.Group>
-
-            <Form.Group controlId="exampleForm.ControlSelect1" >
-              <Form.Control as="select" name="role" onChange={(e) => onChange(e)}>
-                <option value="">Choose Role</option>
-                <option value="user">As User</option>
-                <option value="partner">As Partner</option>
-              </Form.Control>
-            </Form.Group>
-
-            <div className="mt-4 text-center">
-              <Button variant="dark" type="submit" className="btn-block">
-                Register
-              </Button>
-              <Button variant="white" className="btn-block btn-outline-warning" onClick={handleClose}>
-                Close
-              </Button>
-
-              <Form.Text className="text-muted mt-2">
-                Already have an account? Klik <a href="" className="text-dark font-weight-500">Here</a>
-              </Form.Text>
-            </div>
-
-          </Form>
-        </div>
-      </Modal.Body>
-    </Modal>
-
-    <Modal show={showConfirmPassword} onHide={handleCloseConfirmPassword} className="foodways-modal" centered>
-      
-      <Modal.Body className="px-4">
-        {errorPassword && <div class="alert alert-danger" role="alert">
-          {errorPassword}
-        </div>}
-        <div>
-          <h4 className="text-warning">Confirm Password</h4>
-        </div>
-        <div className="mt-4">
-          <div className="username">
-            <h4>Masuk sebagai {email}</h4>
-          </div>
-          <Form onSubmit={handleConfirmPassword}>
-
-            <Form.Group controlId="formBasicPassword">
-              <Form.Control type="password" placeholder="Password" value={confirmPassword} onInput={(e) => setConfirmPass(e.target.value)} />
-            </Form.Group>
-
-            <div className="mt-4 text-center">
-              <Button variant="dark" type="submit" className="btn-block">
-                Login
-              </Button>
-              <Button variant="white" className="btn-block btn-outline-warning" onClick={logout}>
-                Close
-              </Button>
-
-              <Form.Text className="text-muted mt-2">
-                Already have an account? Klik <a href="" className="text-dark font-weight-500">Here</a>
-              </Form.Text>
-            </div>
-
-          </Form>
-        </div>
-      </Modal.Body>
-    </Modal>
-    </>
-  );
+        )}
+      </Formik>
+    </div>
+  )
 }
 
 export default Register

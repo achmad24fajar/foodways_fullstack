@@ -12,7 +12,7 @@ exports.getTransactions = async (req, res) => {
 			include: [{
 				model: User,
 				attributes:{
-					exclude: ["email", "password", "role", "gender", "phone", "createdAt", "updatedAt", "image", "location", "slug"]
+					exclude: ["id", "email", "password", "role", "gender", "phone", "createdAt", "updatedAt", "image", "location", "slug"]
 				},
 			},{
 				model: Order,
@@ -45,6 +45,7 @@ exports.getTransactions = async (req, res) => {
 				}
 			})
 			return{
+				id:transaction.id,
 				...transaction.User,
 				status: transaction.status,
 				total: transaction.total,

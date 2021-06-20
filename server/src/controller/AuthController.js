@@ -6,7 +6,6 @@ const Joi = require("joi");
 exports.registerUser = async (req, res) => {
   try {
     const { fullname, email, password } = req.body;
-    console.log(req.body)
 
     const schema = Joi.object({
       fullname: Joi.string().required(),
@@ -15,7 +14,6 @@ exports.registerUser = async (req, res) => {
       phone: Joi.string().required(),
       gender: Joi.string(),
       location: Joi.string(),
-      role: Joi.string().required(),
     });
 
     const { error } = schema.validate(req.body);
@@ -46,7 +44,8 @@ exports.registerUser = async (req, res) => {
     const user = await User.create({
       ...req.body,
       password: hashedPassword,
-      slug: slug
+      slug: slug,
+      role: 'user'
     });
 
     const secretKey = "akda4860@a9d1";

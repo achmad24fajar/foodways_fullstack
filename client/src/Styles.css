@@ -16,6 +16,15 @@ body{
 	font-size: 30px!important;
 }
 
+/* Foodways Alert */
+.foodways-alert{
+  top: 0;
+  left: 15px;
+  width: 100%;
+  padding: 10px;
+  border-top-left-radius: 3px;
+}
+
 /*Set Font*/
 .libre{
 	font-family: 'Libre Baskerville', serif;
@@ -28,6 +37,104 @@ body{
 input:focus,select:focus{
 	box-shadow: 0px 0px 2px 2px #ffc107!important;
 	border: #ffc107!important;
+}
+
+/* Register */
+.modal-content{
+  min-height: 350px;
+}
+.error{
+  position: absolute;
+  font-size: 11px;
+  font-weight: bold;
+}
+.register-image{
+  position: absolute;
+  right: 7px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 20px;
+  min-height: 348px;
+}
+.slider-frame{
+  overflow: hidden;
+  height: 300px;
+  width: 536px;
+}
+.auth-frame{
+  overflow: hidden;
+  height: 314px;
+  width: 568px;
+}
+.auth-slider{
+  width: 1136px;
+  height: 300px;
+  position: relative;
+  display: flex;
+  transition: all .5s ease-out;
+}
+.auth-container{
+  width: 568px;
+  height: 315px;
+  position: relative;
+  padding-right: 15px;
+}
+.slide-auth{
+  transform: translateX(-568px);
+}
+@keyframes slideShow {
+  0% {right: 0px;}
+  10% {right: 0px;}
+  20% {right: 536px;}
+  30% {right: 536px;}
+  40% {right: 1072px;}
+  50% {right: 1072px;}
+  60% {right: 536px;}
+  70% {right: 536px;}
+  80% {right: 0px;}
+  90% {right: 0px;}
+  100% {right: 0px;}
+}
+.image-slider{
+  width: 1608px;
+  height: 300px;
+  position: relative;
+  animation: slideShow 20s infinite alternate running;
+  display: flex;
+  margin-top: 10px;
+}
+.img-container{
+  width: 536px;
+  height: 300px;
+  position: relative;
+}
+.img-container img{
+  width: 300px;
+  height: 200px;
+}
+.footer-modal{
+  height: 60px;
+}
+.close-modal{
+  position: absolute;
+  z-index: 300;
+  top: 10px;
+  right: 27px;
+  background: rgba(255,255,255,0.7);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 35px;
+  transition: background 0.4s ease-out;
+}
+.close-modal:hover{
+  background: rgba(255,255,255,1);
+}
+.close-modal svg{
+  font-size: 30px;
+  vertical-align: middle;
 }
 
 a.navbar-brand{
@@ -69,15 +176,11 @@ a.navbar-brand{
 }
 
 .landing-page{
+	height: 558px;
+	padding-top: 150px;
 	left: 0;
 	right: 0;
 	top: 0;
-	height: 558px;
-	z-index: 100;
-}
-
-.landing-position{
-	margin-top: 150px;
 }
 
 .landing-text h1{
@@ -111,14 +214,9 @@ a.navbar-brand{
 
 /*Content*/
 .content{
-	position: absolute;
-	z-index: 200;
 	background: #EFEFEF;
-	left: 0;
-	right: 0;
-	top: 558px;
-	padding: 120px 0 50px 0;
-	height: 700px;
+	padding: 50px 0;
+	margin-top: 480px;
 }
 
 .line{
@@ -190,8 +288,8 @@ a.navbar-brand{
 }
 
 /*Product Menu*/
-.detail-product-menu{
-	margin: 120px 0 30px 0;
+.products{
+	margin: 40px 0 30px;
 }
 
 /*Profile Page*/
@@ -253,4 +351,42 @@ position: relative;
 	background-repeat: no-repeat;
 	width: 250px;
 	height: 250px;
+}
+
+
+/*Media Query*/
+/*Mobile*/
+@media (max-width: 767.98px) {
+	.landing-page{
+		padding: 100px 30px 50px;
+		height: 300px!important;
+	}
+	.landing-text h1{
+		font-size: 30px!important;
+	}
+	.line{
+		border-width: 2px;
+	}
+	.content{
+		margin-top: 200px!important;
+		padding: 50px 30px;
+	}
+}
+
+@media (max-width: 960px) {
+	.landing-page{
+		padding: 100px 30px 50px;
+		height: 500px;
+	}
+	.landing-text h1{
+		font-size: 40px;
+	}
+	.pizza img{
+		width: 300px;
+		height: 277px;
+		top: 0;
+	}
+	.content{
+		margin-top: 420px;
+	}
 }

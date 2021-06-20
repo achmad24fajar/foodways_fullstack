@@ -1,37 +1,33 @@
 import {useContext, useState} from 'react';
-import {Button, Modal, Form} from 'react-bootstrap';
 import {useHistory} from 'react-router-dom';
-import {UserContext} from '../context/userContext';
 import { API, setAuthToken } from "../config/api";
+import { Formik, Form } from "formik"
+import * as Yup from 'yup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartPlus, faUtensils } from '@fortawesome/free-solid-svg-icons'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { isRegister } from '../actions'
+import { useDispatch, useSelector } from "react-redux";
+
+import TextField from "./form/TextField"
 
 function LoginForm(props) {
   const router = useHistory();
-  const [state, dispatch] = useContext(UserContext);
-  const [show, setShow] = useState(false);
-  const [newerror, setError] = useState('');
+  const dispatch = useDispatch();
 
+  const [error, setError] = useState('');
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-
   const { email, password } = form;
 
-  const onChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const SigninSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Required'),
+    password: Yup.string().required('Password is required')
+    .min(8, 'Too Short!')
+ });
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const loginHandler = async (e) => {
-    e.preventDefault();
-
+  const handleLogin = async () => {
     try {
       const config = {
         headers: {
@@ -46,15 +42,10 @@ function LoginForm(props) {
 
       const response = await API.post("/login", body, config);
 
-      dispatch({
-        type: "LOGIN_SUCCESS",
-        payload: response.data.data.user,
-      });
-
       const { role, token } = response.data.data.user
 
       setAuthToken(token);
-      
+
       if(role == 'partner'){
         router.push('/partner');
       }else{
@@ -72,56 +63,47 @@ function LoginForm(props) {
   };
 
   return (
-    <>
-
-    {(props.from == 'products')? (
-       <Button variant="warning" onClick={handleShow} className="btn btn-block">
-       <FontAwesomeIcon icon={faCartPlus} /> Order</Button>
-    ) : (
-      <Button variant="dark" onClick={handleShow} className="btn-sm">Login</Button>
+    <div className={error && 'pt-5'}>
+    {error && (
+      <div className="bg-danger position-absolute foodways-alert text-light" role="alert">
+        <FontAwesomeIcon icon={faExclamationTriangle} /> {error}
+      </div>
     )}
-
-    <Modal show={show} onHide={handleClose} className="foodways-modal" backdrop="static" centered>
-
-      <Modal.Body className="px-4">
-        <div>
-          <h2 className="text-warning">Login</h2>
-        </div>
-        {newerror && 
-          <div class="alert alert-danger" role="alert">
-          {newerror}
-          </div>
-        }
+    <div className="ml-3 text-center">
+      <h2 className="text-warning">Login</h2>
+    </div>
+    <Formik
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+      validationSchema={SigninSchema}
+      onSubmit={(values) => {
+        setForm(values)
+        handleLogin()
+      }}
+    >
+      {({values}) => (
         <div className="mt-4">
-          <Form onSubmit={loginHandler}>
-
-            <Form.Group controlId="formBasicEmail">
-              <Form.Control type="email" placeholder="Enter email" name="email" value={email} onInput={e => onChange(e)} />
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword">
-              <Form.Control type="password" placeholder="Password" name="password" value={password} onInput={e => onChange(e)} />
-            </Form.Group>
-
-            <div className="mt-4 text-center">
-              <Button variant="dark" type="submit" className="btn-block">
-                Login
-              </Button>
-              <Button variant="white" className="btn-block btn-outline-warning" onClick={handleClose}>
-                Close
-              </Button>
-
-              <Form.Text className="text-muted mt-2">
-                Don't have an account? Klik <a href="" className="text-dark font-weight-500">Here</a>
-              </Form.Text>
+          <Form className="ml-3">
+          {console.log(values)}
+            <TextField type="email" name="email" placeholder="Your E-Mail" />
+            <TextField type="password" name="password" placeholder="Password" />
+            <div className="mt-3">
+              <button className="btn btn-warning btn-block text-light" type="submit">Login</button>
             </div>
-
+            <div className="text-muted mt-2 text-center">
+              Don't have an account? Klik
+              <span
+              className="text-dark font-weight-500"
+              role="button"
+              onClick={() => dispatch(isRegister())}> Here</span>
+            </div>
           </Form>
         </div>
-      </Modal.Body>
-    </Modal>
-
-    </>
+      )}
+    </Formik>
+    </div>
   );
 }
 
