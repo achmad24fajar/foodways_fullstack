@@ -39,7 +39,7 @@ input:focus,select:focus{
 	border: #ffc107!important;
 }
 
-/* Register */
+/* Authentication */
 .modal-content{
   min-height: 350px;
 }
@@ -136,6 +136,7 @@ input:focus,select:focus{
   font-size: 30px;
   vertical-align: middle;
 }
+/* End of Authentication */
 
 a.navbar-brand{
   font-family: 'Barlow Condensed', sans-serif;
@@ -164,23 +165,18 @@ a.navbar-brand{
 	font-weight: 500;
 }
 
-.foodways-modal{
-	width: 300px;
-	margin: 0 auto;
-	left: 0;
-	right: 0;
-}
-
 .foodways-navbar{
 	z-index: 200;
 }
 
+/* Landing Page */
 .landing-page{
-	height: 558px;
-	padding-top: 150px;
+	height: 100vh;
+	padding: 150px 30px 0 30px;
 	left: 0;
 	right: 0;
 	top: 0;
+  z-index: 100;
 }
 
 .landing-text h1{
@@ -202,6 +198,17 @@ a.navbar-brand{
 	vertical-align: middle;
 	font-size: 40px;
 }
+.content{
+	background: #FFFFFF;
+	padding: 30px;
+	top: 550px;
+  z-index: 300;
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  width: 80vw;
+}
 .popular-restourant-item{
 	height: 60px;
 }
@@ -213,12 +220,6 @@ a.navbar-brand{
 }
 
 /*Content*/
-.content{
-	background: #EFEFEF;
-	padding: 50px 0;
-	margin-top: 480px;
-}
-
 .line{
 	border-top: 5px solid rgba(67, 52, 52, 1);
 	width: 100%;

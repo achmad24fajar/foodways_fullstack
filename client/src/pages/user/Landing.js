@@ -22,7 +22,7 @@ const Landing = () => {
   });
 
   return (
-    <div>
+    <div className="mb-4">
       <div className="bg-warning landing-page position-absolute">
         <Container>
           <Row>
@@ -55,10 +55,9 @@ const Landing = () => {
         </Container>
       </div>
 
-      <div className="content">
+      <div className="content rounded shadow">
         <div className="popular-restourant mb-5">
           <Container>
-            <h2>Popular Restourant</h2>
             {loading ? (
               <div>
                 <h5>Loading...</h5>
